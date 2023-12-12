@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"os"
+	"strings"
 )
 
 type YunFile struct {
@@ -42,20 +43,17 @@ func (y *YunFile) getName(s []byte) (name string, err error) {
 	return hex.EncodeToString(h.Sum(nil)), nil
 }
 
-func (y *YunFile) Upload(data []byte) (name string, err error) {
+func (y *YunFile) Upload(data []byte, path ...string) (name string, err error) {
 	//获取名称
-	if name, err = y.getName(data); err != nil {
-		return
-	}
-	//判断存在
-	var exist bool
-	if exist, err = y.exist(y.dir + "/" + name); err != nil {
-		return
+	if len(path) == 0 {
+		if name, err = y.getName(data); err != nil {
+			return
+		}
+	} else {
+		name = strings.TrimSpace(path[0])
 	}
 	//存储文件
-	if !exist {
-		err = os.WriteFile(y.dir+"/"+name, data, os.ModePerm)
-	}
+	err = os.WriteFile(y.dir+"/"+name, data, os.ModePerm)
 	return
 }
 

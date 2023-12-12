@@ -5,6 +5,7 @@ import (
 	"crypto/sha1"
 	"encoding/hex"
 	"io"
+	"strings"
 
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 )
@@ -42,15 +43,17 @@ func (a *AliyunOSS) getName(s []byte) (name string, err error) {
 	return hex.EncodeToString(h.Sum(nil)), nil
 }
 
-func (a *AliyunOSS) Upload(data []byte) (name string, err error) {
+func (a *AliyunOSS) Upload(data []byte, path ...string) (name string, err error) {
 	//获取名称
-	if name, err = a.getName(data); err != nil {
-		return
+	if len(path) == 0 {
+		if name, err = a.getName(data); err != nil {
+			return
+		}
+	} else {
+		name = strings.TrimSpace(path[0])
 	}
 	//使用修改的方式是为了防止自定义名称无法覆盖原数据
-	if err = a.bucket.PutObject(name, bytes.NewReader(data)); err != nil {
-		return
-	}
+	err = a.bucket.PutObject(name, bytes.NewReader(data))
 	return
 }
 
