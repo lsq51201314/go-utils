@@ -58,7 +58,7 @@ func (a *AliyunOSS) Upload(path string, data []byte, name ...string) (res string
 		file = strings.TrimSpace(name[0])
 	}
 	dir := path[1:] + "/" + file
-	//使用修改的方式是为了防止自定义名称无法覆盖原数据
+	//存储文件
 	err = a.bucket.PutObject(dir, bytes.NewReader(data))
 	fmt.Println(dir)
 	return
