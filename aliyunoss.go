@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/sha1"
 	"encoding/hex"
+	"fmt"
 	"io"
 	"strings"
 
@@ -43,23 +44,33 @@ func (a *AliyunOSS) getName(s []byte) (name string, err error) {
 	return hex.EncodeToString(h.Sum(nil)), nil
 }
 
-func (a *AliyunOSS) Upload(data []byte, path ...string) (name string, err error) {
+func (a *AliyunOSS) Upload(path string, data []byte, name ...string) (res string, err error) {
+	if path[:1] != "/" {
+		path = "/" + path
+	}
 	//获取名称
-	if len(path) == 0 {
-		if name, err = a.getName(data); err != nil {
+	var file string
+	if len(name) == 0 {
+		if file, err = a.getName(data); err != nil {
 			return
 		}
 	} else {
-		name = strings.TrimSpace(path[0])
+		file = strings.TrimSpace(name[0])
 	}
+	dir := path[1:] + "/" + file
 	//使用修改的方式是为了防止自定义名称无法覆盖原数据
-	err = a.bucket.PutObject(name, bytes.NewReader(data))
+	err = a.bucket.PutObject(dir, bytes.NewReader(data))
+	fmt.Println(dir)
 	return
 }
 
-func (a *AliyunOSS) Download(name string) (data []byte, err error) {
+func (a *AliyunOSS) Download(path string) (data []byte, err error) {
+	if path[:1] != "/" {
+		path = "/" + path
+	}
+
 	var body io.ReadCloser
-	if body, err = a.bucket.GetObject(name); err != nil {
+	if body, err = a.bucket.GetObject(path[1:]); err != nil {
 		return
 	}
 	defer func(body io.ReadCloser) {
@@ -72,7 +83,11 @@ func (a *AliyunOSS) Download(name string) (data []byte, err error) {
 	return buf.Bytes(), nil
 }
 
-func (a *AliyunOSS) Delete(name string) (err error) {
-	err = a.bucket.DeleteObject(name)
+func (a *AliyunOSS) Delete(path string) (err error) {
+	if path[:1] != "/" {
+		path = "/" + path
+	}
+
+	err = a.bucket.DeleteObject(path[1:])
 	return
 }
