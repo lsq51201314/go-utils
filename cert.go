@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc/credentials"
 )
 
-func NewServer(cafile, pemfiile, keyfile string) (c credentials.TransportCredentials, err error) {
+func NewCertServer(cafile, pemfiile, keyfile string) (c credentials.TransportCredentials, err error) {
 	var cert tls.Certificate
 	if cert, err = tls.LoadX509KeyPair(pemfiile, keyfile); err != nil {
 		return
@@ -27,7 +27,7 @@ func NewServer(cafile, pemfiile, keyfile string) (c credentials.TransportCredent
 	return
 }
 
-func NewClient(cafile, pemfiile, keyfile string) (c credentials.TransportCredentials, err error) {
+func NewCertClient(cafile, pemfiile, keyfile string) (c credentials.TransportCredentials, err error) {
 	var cert tls.Certificate
 	if cert, err = tls.LoadX509KeyPair(pemfiile, keyfile); err != nil {
 		return
