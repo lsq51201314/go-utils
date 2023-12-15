@@ -18,12 +18,12 @@ type RedisOptions struct {
 
 type Redis struct {
 	prefix string
-	db     *redis.Client
+	DB     *redis.Client
 }
 
 func NewRedis(options RedisOptions) (r Redis, err error) {
 	r.prefix = options.Prefix
-	r.db = redis.NewClient(&redis.Options{
+	r.DB = redis.NewClient(&redis.Options{
 		Addr: fmt.Sprintf("%s:%d",
 			options.Host,
 			options.Port,
@@ -34,17 +34,17 @@ func NewRedis(options RedisOptions) (r Redis, err error) {
 		PoolSize:     options.MaxOpen,
 		MinIdleConns: options.MinIdle,
 	})
-	_, err = r.db.Ping().Result()
+	_, err = r.DB.Ping().Result()
 	return
 }
 
 func (r *Redis) Lock(name string) (bool, error) {
 	key := r.prefix + ":redis:lock:" + name
 	//锁定10秒
-	return r.db.SetNX(key, "lock", time.Duration(10)*time.Second).Result()
+	return r.DB.SetNX(key, "lock", time.Duration(10)*time.Second).Result()
 }
 
 func (r *Redis) UnLock(name string) error {
 	key := r.prefix + ":redis:lock:" + name
-	return r.db.Del(key).Err()
+	return r.DB.Del(key).Err()
 }
