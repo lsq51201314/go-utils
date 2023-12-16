@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/locales/zh"
-	uTranslations "github.com/go-playground/universal-translator"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
 	zhTranslations "github.com/go-playground/validator/v10/translations/zh"
@@ -33,7 +32,7 @@ func NewGinBind() (g GinBind, err error) {
 			return name
 		})
 		zhT := zh.New()
-		uni := uTranslations.New(zhT, zhT)
+		uni := ut.New(zhT, zhT)
 		if g.trans, ok = uni.GetTranslator("zh"); ok {
 			err = zhTranslations.RegisterDefaultTranslations(t, g.trans)
 		}
