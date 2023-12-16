@@ -12,11 +12,15 @@ type YunSMS struct {
 }
 
 // 新建实例
-func NewYunSMS(accessKeyId, accessKeySecret, smsEndpoint string) (sms YunSMS, err error) {
+func NewYunSMS(accessKeyId, accessKeySecret string, smsEndpoint ...string) (sms YunSMS, err error) {
+	endpoint:="dysmsapi.aliyuncs.com"
+	if len(smsEndpoint) > 0 {
+		endpoint = smsEndpoint[0]
+	}
 	config := &openapi.Config{
 		AccessKeyId:     tea.String(accessKeyId),
 		AccessKeySecret: tea.String(accessKeySecret),
-		Endpoint:        tea.String(smsEndpoint),
+		Endpoint:        tea.String(endpoint),
 	}
 	sms.client, err = dysmsapi.NewClient(config)
 	return
