@@ -54,7 +54,7 @@ func (j *Jwt) ParseToken(token string) (custom interface{}, err error) {
 	if info, ok := t.Claims.(*jwtcustom); ok && t.Valid {
 		custom = info.Custom
 		return
-	} 
+	}
 	err = errors.New("invalid  token")
 	return
 }
