@@ -7,6 +7,7 @@ import (
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 )
 
+// 文件信息
 type YunFile struct {
 	Path         string
 	Size         int64
