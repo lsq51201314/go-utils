@@ -15,7 +15,7 @@ import (
 // 连接配置
 type MysqlOptions struct {
 	User    string //"root"
-	Port    int    //3306
+	Port    int32  //3306
 	MaxOpen int    //100
 	MinIdle int    //20
 }
