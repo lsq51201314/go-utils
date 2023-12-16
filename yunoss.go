@@ -69,7 +69,7 @@ func (a *YunOSS) Delete(path string) (err error) {
 }
 
 // 枚举文件
-func (a *YunOSS) Query(prefix string, size int, next string) (files []string, token string, err error) {
+func (a *YunOSS) Query(prefix string, size int, next ...string) (files []string, token string, err error) {
 	if size <= 0 {
 		size = 100
 	}
@@ -79,12 +79,16 @@ func (a *YunOSS) Query(prefix string, size int, next string) (files []string, to
 	if prefix[:1] != "/" {
 		prefix = "/" + prefix
 	}
+	files = []string{}
+	token = ""
+	if len(next) > 0 {
+		token = next[0]
+	}
 	var lsRes oss.ListObjectsResultV2
 	a.bucket.ListObjects()
-	if lsRes, err = a.bucket.ListObjectsV2(oss.ContinuationToken(next), oss.MaxKeys(size), oss.Prefix(prefix[1:])); err != nil {
+	if lsRes, err = a.bucket.ListObjectsV2(oss.ContinuationToken(token), oss.MaxKeys(size), oss.Prefix(prefix[1:])); err != nil {
 		return
 	}
-	files = []string{}
 	for _, object := range lsRes.Objects {
 		if object.Key != prefix[1:] {
 			files = append(files, object.Key)
