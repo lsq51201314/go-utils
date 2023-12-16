@@ -7,6 +7,12 @@ import (
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 )
 
+type YunFile struct {
+	Path         string
+	Size         int64
+	LastModified string
+}
+
 // 存储实例
 type YunOSS struct {
 	client *oss.Client
@@ -69,7 +75,7 @@ func (a *YunOSS) Delete(path string) (err error) {
 }
 
 // 枚举文件
-func (a *YunOSS) Query(prefix string, size int, next ...string) (files []string, token string, err error) {
+func (a *YunOSS) Query(prefix string, size int, next ...string) (files []YunFile, token string, err error) {
 	if size <= 0 {
 		size = 100
 	}
@@ -79,19 +85,26 @@ func (a *YunOSS) Query(prefix string, size int, next ...string) (files []string,
 	if prefix[:1] != "/" {
 		prefix = "/" + prefix
 	}
-	files = []string{}
+	files = []YunFile{}
 	token = ""
 	if len(next) > 0 {
 		token = next[0]
 	}
 	var lsRes oss.ListObjectsResultV2
 	a.bucket.ListObjects()
-	if lsRes, err = a.bucket.ListObjectsV2(oss.ContinuationToken(token), oss.MaxKeys(size), oss.Prefix(prefix[1:])); err != nil {
+	if lsRes, err = a.bucket.ListObjectsV2(
+		oss.ContinuationToken(token),
+		oss.MaxKeys(size),
+		oss.Prefix(prefix[1:])); err != nil {
 		return
 	}
 	for _, object := range lsRes.Objects {
 		if object.Key != prefix[1:] {
-			files = append(files, object.Key)
+			files = append(files, YunFile{
+				Path:         object.Key,
+				Size:         object.Size,
+				LastModified: object.LastModified.In(location).Format("2006-01-02 15:04:05"),
+			})
 		}
 	}
 	if lsRes.IsTruncated {
