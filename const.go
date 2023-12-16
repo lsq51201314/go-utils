@@ -6,20 +6,24 @@ import (
 	"github.com/spf13/cast"
 )
 
+// 常量配置
 type ConstOptions struct {
 	ID   int    `json:"id,string"`
 	Name string `json:"name"`
 	Text string `json:"text"`
 }
 
+// 常量实例
 type Const struct{}
 
+// 自动赋值
 func (c Const) AutoBuild(dst ...interface{}) {
 	for i := 0; i < len(dst); i++ {
 		c.Default(dst[i])
 	}
 }
 
+// 默认值
 func (c Const) Default(t interface{}) {
 	val := reflect.ValueOf(t).Elem()
 	for i := 0; i < val.NumField(); i++ {
@@ -29,6 +33,7 @@ func (c Const) Default(t interface{}) {
 	}
 }
 
+// 获取配置
 func (c Const) GetOption(t interface{}, id int) (data ConstOptions) {
 	val := reflect.ValueOf(t).Elem()
 	for i := 0; i < val.NumField(); i++ {
@@ -43,6 +48,7 @@ func (c Const) GetOption(t interface{}, id int) (data ConstOptions) {
 	return
 }
 
+// 获取配置
 func (c Const) GetOptions(t interface{}) (data []ConstOptions) {
 	data = make([]ConstOptions, 0)
 	val := reflect.ValueOf(t).Elem()
@@ -57,6 +63,7 @@ func (c Const) GetOptions(t interface{}) (data []ConstOptions) {
 	return
 }
 
+// 获取配置
 func (c Const) GetConfig(t interface{}, name string, id int) (config string) {
 	val := reflect.ValueOf(t).Elem()
 	for i := 0; i < val.NumField(); i++ {

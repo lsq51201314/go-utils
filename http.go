@@ -9,11 +9,17 @@ import (
 	"time"
 )
 
+// http实例
 type Http struct{}
 
-func (h Http) Get(url string) (code int, body []byte, err error) {
+// get请求
+func (h Http) Get(url string, timeout ...int) (code int, body []byte, err error) {
+	to := 5
+	if len(timeout) > 0 {
+		to = timeout[0]
+	}
 	client := http.Client{
-		Timeout: time.Second * 5,
+		Timeout: time.Second * time.Duration(to),
 	}
 	var req *http.Request
 	if req, err = http.NewRequestWithContext(context.Background(), http.MethodGet, url, nil); err != nil {
@@ -31,9 +37,14 @@ func (h Http) Get(url string) (code int, body []byte, err error) {
 	return
 }
 
-func (h Http) Post(url string, data interface{}) (code int, body []byte, err error) {
+// post请求
+func (h Http) Post(url string, data interface{}, timeout ...int) (code int, body []byte, err error) {
+	to := 5
+	if len(timeout) > 0 {
+		to = timeout[0]
+	}
 	client := http.Client{
-		Timeout: time.Second * 5,
+		Timeout: time.Second * time.Duration(to),
 	}
 	var dataByte []byte
 	if dataByte, err = json.Marshal(data); err != nil {

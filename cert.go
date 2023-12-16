@@ -8,7 +8,14 @@ import (
 	"google.golang.org/grpc/credentials"
 )
 
-func NewCertServer(cafile, pemfiile, keyfile string) (c credentials.TransportCredentials, err error) {
+// 证书实例
+type Cert struct {
+	Server credentials.TransportCredentials
+	Client credentials.TransportCredentials
+}
+
+// 服务证书
+func (c *Cert) NewServer(cafile, pemfiile, keyfile string) (err error) {
 	var cert tls.Certificate
 	if cert, err = tls.LoadX509KeyPair(pemfiile, keyfile); err != nil {
 		return
@@ -19,7 +26,7 @@ func NewCertServer(cafile, pemfiile, keyfile string) (c credentials.TransportCre
 		return
 	}
 	certPool.AppendCertsFromPEM(ca)
-	c = credentials.NewTLS(&tls.Config{
+	c.Server = credentials.NewTLS(&tls.Config{
 		Certificates: []tls.Certificate{cert},
 		ClientAuth:   tls.RequireAndVerifyClientCert,
 		ClientCAs:    certPool,
@@ -27,7 +34,8 @@ func NewCertServer(cafile, pemfiile, keyfile string) (c credentials.TransportCre
 	return
 }
 
-func NewCertClient(cafile, pemfiile, keyfile string) (c credentials.TransportCredentials, err error) {
+// 客户证书
+func (c *Cert) NewClient(cafile, pemfiile, keyfile string) (err error) {
 	var cert tls.Certificate
 	if cert, err = tls.LoadX509KeyPair(pemfiile, keyfile); err != nil {
 		return
@@ -38,7 +46,7 @@ func NewCertClient(cafile, pemfiile, keyfile string) (c credentials.TransportCre
 		return
 	}
 	certPool.AppendCertsFromPEM(ca)
-	c = credentials.NewTLS(&tls.Config{
+	c.Client = credentials.NewTLS(&tls.Config{
 		Certificates: []tls.Certificate{cert},
 		RootCAs:      certPool,
 	})

@@ -11,26 +11,22 @@ import (
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 )
 
-type AliyunOSSOptions struct {
-	AccessKeyId     string
-	AccessKeySecret string
-	OssEndpoint     string
-	OssBucketName   string
-}
-
+// 存储实例
 type AliyunOSS struct {
 	client *oss.Client
 	bucket *oss.Bucket
 }
 
-func NewAliyunOSS(options AliyunOSSOptions) (aliyun AliyunOSS, err error) {
-	if aliyun.client, err = oss.New(
-		options.OssEndpoint,
-		options.AccessKeyId,
-		options.AccessKeySecret); err != nil {
+// 新建实例
+func NewAliyunOSS(id, secret, bucket string, endpoint ...string) (aliyun AliyunOSS, err error) {
+	cfg := "oss-cn-shenzhen.aliyuncs.com"
+	if len(endpoint) > 0 {
+		cfg = endpoint[0]
+	}
+	if aliyun.client, err = oss.New(cfg, id, secret); err != nil {
 		return
 	}
-	if aliyun.bucket, err = aliyun.client.Bucket(options.OssBucketName); err != nil {
+	if aliyun.bucket, err = aliyun.client.Bucket(bucket); err != nil {
 		return
 	}
 	return
@@ -44,6 +40,7 @@ func (a *AliyunOSS) getName(s []byte) (name string, err error) {
 	return hex.EncodeToString(h.Sum(nil)), nil
 }
 
+// 上传文件
 func (a *AliyunOSS) Upload(path string, data []byte, name ...string) (res string, err error) {
 	if path[:1] != "/" {
 		path = "/" + path
@@ -64,6 +61,7 @@ func (a *AliyunOSS) Upload(path string, data []byte, name ...string) (res string
 	return
 }
 
+// 下载文件
 func (a *AliyunOSS) Download(path string) (data []byte, err error) {
 	if path[:1] != "/" {
 		path = "/" + path
@@ -83,6 +81,7 @@ func (a *AliyunOSS) Download(path string) (data []byte, err error) {
 	return buf.Bytes(), nil
 }
 
+// 删除文件
 func (a *AliyunOSS) Delete(path string) (err error) {
 	if path[:1] != "/" {
 		path = "/" + path

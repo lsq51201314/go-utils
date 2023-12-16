@@ -8,10 +8,12 @@ import (
 	"strings"
 )
 
+// 文件存储
 type YunFile struct {
 	dir string
 }
 
+// 存储实例
 func NewYunFile() (y YunFile, err error) {
 	y.dir = "./assets"
 	var exist bool
@@ -43,6 +45,7 @@ func (y *YunFile) getName(s []byte) (name string, err error) {
 	return hex.EncodeToString(h.Sum(nil)), nil
 }
 
+// 上传文件
 func (y *YunFile) Upload(path string, data []byte, name ...string) (res string, err error) {
 	if path[:1] != "/" {
 		path = "/" + path
@@ -74,6 +77,7 @@ func (y *YunFile) Upload(path string, data []byte, name ...string) (res string, 
 	return
 }
 
+// 下载文件
 func (y *YunFile) Download(path string) (data []byte, err error) {
 	if path[:1] != "/" {
 		path = "/" + path
@@ -92,6 +96,7 @@ func (y *YunFile) Download(path string) (data []byte, err error) {
 	return
 }
 
+// 删除文件
 func (y *YunFile) Delete(path string) (err error) {
 	if path[:1] != "/" {
 		path = "/" + path

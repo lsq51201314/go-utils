@@ -8,6 +8,7 @@ import (
 
 type Zlib struct{}
 
+// 压缩数据
 func (z Zlib) Compress(src []byte) (data []byte, err error) {
 	var in bytes.Buffer
 	w := zlib.NewWriter(&in)
@@ -21,6 +22,7 @@ func (z Zlib) Compress(src []byte) (data []byte, err error) {
 	return
 }
 
+// 解压数据
 func (z Zlib) UnCompress(src []byte) (data []byte, err error) {
 	b := bytes.NewReader(src)
 	var out bytes.Buffer

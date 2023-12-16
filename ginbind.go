@@ -14,10 +14,12 @@ import (
 	zhTranslations "github.com/go-playground/validator/v10/translations/zh"
 )
 
+// 参数绑定
 type GinBind struct {
 	trans ut.Translator
 }
 
+// 新建实例
 func NewGinBind() (g GinBind, err error) {
 	if t, ok := binding.Validator.Engine().(*validator.Validate); !ok {
 		err = errors.New("translator error")
@@ -47,7 +49,8 @@ func (g *GinBind) translate(errs validator.ValidationErrors) (res string) {
 	return
 }
 
-func (g *GinBind) Bind(c *gin.Context, params interface{}, data interface{}) (err error) {
+// 获取参数
+func (g *GinBind) Get(c *gin.Context, params interface{}, data interface{}) (err error) {
 	//绑定参数
 	if params != nil {
 		err = c.ShouldBindQuery(params)
