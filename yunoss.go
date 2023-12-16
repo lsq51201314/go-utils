@@ -2,10 +2,7 @@ package utils
 
 import (
 	"bytes"
-	"crypto/sha1"
-	"encoding/hex"
 	"io"
-	"strings"
 
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 )
@@ -31,31 +28,13 @@ func NewYunOSS(accessKeyId, accessKeySecret, ossBucketName string, ossEndpoint .
 	return
 }
 
-func (a *YunOSS) getName(s []byte) (name string, err error) {
-	h := sha1.New()
-	if _, err = h.Write(s); err != nil {
-		return
-	}
-	return hex.EncodeToString(h.Sum(nil)), nil
-}
-
 // 上传文件
-func (a *YunOSS) Upload(path string, data []byte, name ...string) (res string, err error) {
+func (a *YunOSS) Upload(path string, data []byte) (res string, err error) {
 	if path[:1] != "/" {
 		path = "/" + path
 	}
-	//获取名称
-	var file string
-	if len(name) == 0 {
-		if file, err = a.getName(data); err != nil {
-			return
-		}
-	} else {
-		file = strings.TrimSpace(name[0])
-	}
-	dir := path[1:] + "/" + file
 	//存储文件
-	err = a.bucket.PutObject(dir, bytes.NewReader(data))
+	err = a.bucket.PutObject(path[1:], bytes.NewReader(data))
 	return
 }
 
@@ -90,7 +69,7 @@ func (a *YunOSS) Delete(path string) (err error) {
 }
 
 // 枚举文件
-func (a *YunOSS) Query(prefix string, size int, next ...string) (files []string, token string, err error) {
+func (a *YunOSS) Query(prefix string, size int, next string) (files []string, token string, err error) {
 	if size <= 0 {
 		size = 100
 	}
@@ -100,16 +79,12 @@ func (a *YunOSS) Query(prefix string, size int, next ...string) (files []string,
 	if prefix[:1] != "/" {
 		prefix = "/" + prefix
 	}
-	files = []string{}
-	token = ""
-	if len(next) > 0 {
-		token = next[0]
-	}
 	var lsRes oss.ListObjectsResultV2
 	a.bucket.ListObjects()
-	if lsRes, err = a.bucket.ListObjectsV2(oss.ContinuationToken(token), oss.MaxKeys(size), oss.Prefix(prefix[1:])); err != nil {
+	if lsRes, err = a.bucket.ListObjectsV2(oss.ContinuationToken(next), oss.MaxKeys(size), oss.Prefix(prefix[1:])); err != nil {
 		return
 	}
+	files = []string{}
 	for _, object := range lsRes.Objects {
 		if object.Key != prefix[1:] {
 			files = append(files, object.Key)
