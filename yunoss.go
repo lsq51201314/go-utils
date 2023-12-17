@@ -42,6 +42,7 @@ func (a *YunOSS) Upload(path string, data []byte) (res string, err error) {
 	}
 	//存储文件
 	err = a.bucket.PutObject(path[1:], bytes.NewReader(data))
+	res = path[1:]
 	return
 }
 
