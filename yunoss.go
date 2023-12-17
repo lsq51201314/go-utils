@@ -36,13 +36,12 @@ func NewYunOSS(accessKeyId, accessKeySecret, ossBucketName string, ossEndpoint .
 }
 
 // 上传文件
-func (a *YunOSS) Upload(path string, data []byte) (res string, err error) {
+func (a *YunOSS) Upload(path string, data []byte) (err error) {
 	if path[:1] != "/" {
 		path = "/" + path
 	}
 	//存储文件
 	err = a.bucket.PutObject(path[1:], bytes.NewReader(data))
-	res = path[1:]
 	return
 }
 
