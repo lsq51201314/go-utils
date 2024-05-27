@@ -25,6 +25,7 @@ func (h Http) Get(url string, timeout ...int) (code int, body []byte, err error)
 	if req, err = http.NewRequestWithContext(context.Background(), http.MethodGet, url, nil); err != nil {
 		return
 	}
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0")
 	var rep *http.Response
 	if rep, err = client.Do(req); err != nil {
 		return
