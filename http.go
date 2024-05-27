@@ -12,20 +12,25 @@ import (
 // http实例
 type Http struct{}
 
+type HttpHeader struct {
+	Key  string
+	Name string
+}
+
 // get请求
-func (h Http) Get(url string, timeout ...int) (code int, body []byte, err error) {
-	to := 5
-	if len(timeout) > 0 {
-		to = timeout[0]
-	}
+func (h Http) Get(url string, header ...HttpHeader) (code int, body []byte, err error) {
 	client := http.Client{
-		Timeout: time.Second * time.Duration(to),
+		Timeout: time.Second * time.Duration(10), //10秒
 	}
 	var req *http.Request
 	if req, err = http.NewRequestWithContext(context.Background(), http.MethodGet, url, nil); err != nil {
 		return
 	}
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0")
+	if len(header) > 0 {
+		for _, v := range header {
+			req.Header.Set(v.Key, v.Name)
+		}
+	}
 	var rep *http.Response
 	if rep, err = client.Do(req); err != nil {
 		return
@@ -39,13 +44,9 @@ func (h Http) Get(url string, timeout ...int) (code int, body []byte, err error)
 }
 
 // post请求
-func (h Http) Post(url string, data interface{}, timeout ...int) (code int, body []byte, err error) {
-	to := 5
-	if len(timeout) > 0 {
-		to = timeout[0]
-	}
+func (h Http) Post(url string, data interface{}, header ...HttpHeader) (code int, body []byte, err error) {
 	client := http.Client{
-		Timeout: time.Second * time.Duration(to),
+		Timeout: time.Second * time.Duration(10), //10秒
 	}
 	var dataByte []byte
 	if dataByte, err = json.Marshal(data); err != nil {
@@ -57,8 +58,11 @@ func (h Http) Post(url string, data interface{}, timeout ...int) (code int, body
 	if req, err = http.NewRequestWithContext(context.Background(), http.MethodPost, url, bodyReader); err != nil {
 		return
 	}
-	req.Header.Set("Content-Type", "application/json;charset=UTF-8")
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0")
+	if len(header) > 0 {
+		for _, v := range header {
+			req.Header.Set(v.Key, v.Name)
+		}
+	}
 	var rep *http.Response
 	if rep, err = client.Do(req); err != nil {
 		return
