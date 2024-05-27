@@ -12,13 +12,8 @@ import (
 // http实例
 type Http struct{}
 
-type HttpHeader struct {
-	Key  string
-	Name string
-}
-
 // get请求
-func (h Http) Get(url string, header ...HttpHeader) (code int, body []byte, err error) {
+func (h Http) Get(url string, header ...map[string][]string) (code int, body []byte, rspheader map[string][]string, err error) {
 	client := http.Client{
 		Timeout: time.Second * time.Duration(10), //10秒
 	}
@@ -27,8 +22,12 @@ func (h Http) Get(url string, header ...HttpHeader) (code int, body []byte, err 
 		return
 	}
 	if len(header) > 0 {
-		for _, v := range header {
-			req.Header.Set(v.Key, v.Name)
+		for k, v := range header[0] {
+			val := ""
+			for _, str := range v {
+				val += str + ";"
+			}
+			req.Header.Set(k, val)
 		}
 	}
 	var rep *http.Response
@@ -40,11 +39,12 @@ func (h Http) Get(url string, header ...HttpHeader) (code int, body []byte, err 
 	}
 	defer rep.Body.Close()
 	code = rep.StatusCode
+	rspheader = rep.Header
 	return
 }
 
 // post请求
-func (h Http) Post(url string, data interface{}, header ...HttpHeader) (code int, body []byte, err error) {
+func (h Http) Post(url string, data interface{}, header ...map[string][]string) (code int, body []byte, rspheader map[string][]string, err error) {
 	client := http.Client{
 		Timeout: time.Second * time.Duration(10), //10秒
 	}
@@ -59,8 +59,12 @@ func (h Http) Post(url string, data interface{}, header ...HttpHeader) (code int
 		return
 	}
 	if len(header) > 0 {
-		for _, v := range header {
-			req.Header.Set(v.Key, v.Name)
+		for k, v := range header[0] {
+			val := ""
+			for _, str := range v {
+				val += str + ";"
+			}
+			req.Header.Set(k, val)
 		}
 	}
 	var rep *http.Response
@@ -72,5 +76,6 @@ func (h Http) Post(url string, data interface{}, header ...HttpHeader) (code int
 	}
 	defer rep.Body.Close()
 	code = rep.StatusCode
+	rspheader = rep.Header
 	return
 }
