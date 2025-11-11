@@ -5,8 +5,12 @@ import (
 )
 
 // 构建参数
-func Build(config any) error {
-	viper.SetConfigFile("./config.yaml")
+func Build(config any, file ...string) error {
+	str := "./config.yaml"
+	if len(file) > 0 {
+		str = file[0]
+	}
+	viper.SetConfigFile(str)
 	if err := viper.ReadInConfig(); err != nil {
 		return err
 	}

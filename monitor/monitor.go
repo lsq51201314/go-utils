@@ -17,7 +17,7 @@ type Monitor struct {
 }
 
 // 新建监视
-func New(path string) (monitor11 *Monitor, err error) {
+func New(path string) (monitor *Monitor, err error) {
 	if !file.IsExist(path) {
 		err = errors.New("文件不存在:" + path)
 		return
