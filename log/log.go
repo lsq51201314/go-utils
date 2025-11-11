@@ -3,14 +3,14 @@ package log
 import (
 	"fmt"
 	"time"
-)
 
-var location, _ = time.LoadLocation("Asia/Shanghai")
+	"github.com/lsq51201314/go-utils/location"
+)
 
 // 信息
 func Info(text string) {
 	fmt.Printf("[%s] (%s) * %s\n",
-		time.Now().In(location).Format("2006-01-02 15:04:05.000000"),
+		time.Now().In(location.Location).Format("2006-01-02 15:04:05.000000"),
 		"msg",
 		text)
 }
@@ -18,7 +18,7 @@ func Info(text string) {
 // 错误
 func Error(text string) {
 	fmt.Printf("[%s] (%s) * %s\n",
-		time.Now().In(location).Format("2006-01-02 15:04:05.000000"),
+		time.Now().In(location.Location).Format("2006-01-02 15:04:05.000000"),
 		"err",
 		text)
 }
