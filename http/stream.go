@@ -10,7 +10,7 @@ import (
 )
 
 // 回调函数
-type CallBack func(body string)
+type CallBack func(line string)
 
 // 流式请求 (POST)
 func Stream(requrl string, params, header map[string]string, data []byte, cfunc CallBack, timeout ...int) ([]byte, error) {
