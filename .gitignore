@@ -7,10 +7,4 @@
 
 # Local History for Visual Studio Code
 .history/
-
-ca.crt
-ca.key
-domain.key
-domain.pem
 main.go
-
