@@ -3,6 +3,7 @@ module github.com/lsq51201314/go-utils
 go 1.25.3
 
 require (
+	github.com/aliyun/alibabacloud-oss-go-sdk-v2 v1.3.0
 	github.com/fsnotify/fsnotify v1.9.0
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/mozillazg/go-pinyin v0.21.0
@@ -39,4 +40,5 @@ require (
 	golang.org/x/sync v0.16.0 // indirect
 	golang.org/x/sys v0.35.0 // indirect
 	golang.org/x/text v0.28.0 // indirect
+	golang.org/x/time v0.4.0 // indirect
 )
