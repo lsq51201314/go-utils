@@ -1,6 +1,6 @@
 module github.com/lsq51201314/go-utils
 
-go 1.25.3
+go 1.25.5
 
 require (
 	github.com/aliyun/alibabacloud-oss-go-sdk-v2 v1.3.0
@@ -9,11 +9,11 @@ require (
 	github.com/mozillazg/go-pinyin v0.21.0
 	github.com/spf13/cast v1.10.0
 	github.com/spf13/viper v1.21.0
-	go.uber.org/zap v1.27.0
+	go.uber.org/zap v1.27.1
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gorm.io/driver/mysql v1.6.0
 	gorm.io/driver/postgres v1.6.0
-	gorm.io/gorm v1.30.0
+	gorm.io/gorm v1.31.1
 )
 
 require (

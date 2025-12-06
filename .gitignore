@@ -8,3 +8,5 @@
 # Local History for Visual Studio Code
 .history/
 main.go
+config.yaml
+log.txt

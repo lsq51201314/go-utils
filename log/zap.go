@@ -1,4 +1,4 @@
-package zap
+package log
 
 import (
 	"os"
@@ -10,8 +10,8 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-//初始化
-func Init() error {
+// 初始化
+func ZapInit() error {
 	writeSyncer := getLogWriter()
 	encoder := getEncoder()
 	var l = new(zapcore.Level)

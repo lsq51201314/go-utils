@@ -9,7 +9,10 @@ import (
 // 压缩数据
 func Compress(src []byte) []byte {
 	var in bytes.Buffer
-	w := zlib.NewWriter(&in)
+	w, err := zlib.NewWriterLevel(&in, zlib.BestCompression) //压缩等级9 最佳压缩
+	if err != nil {
+		return nil
+	}
 	if _, err := w.Write(src); err != nil {
 		return nil
 	}
@@ -26,6 +29,8 @@ func UnCompress(src []byte) []byte {
 	if err != nil {
 		return nil
 	}
+	defer r.Close()
+
 	var out bytes.Buffer
 	if _, err := io.Copy(&out, r); err != nil {
 		return nil
