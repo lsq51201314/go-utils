@@ -7,7 +7,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/lsq51201314/go-utils/gexit"
 	"github.com/lsq51201314/go-utils/glog"
 )
 
@@ -17,6 +16,7 @@ type Ggin struct {
 	port int
 	r    *gin.Engine
 	v    *gin.RouterGroup
+	srv  *http.Server
 }
 
 // 新建
@@ -48,21 +48,24 @@ func New(group string, port int, allowCors bool, setupRoutes RouterSetupFunc, mo
 
 // 运行
 func (t *Ggin) Run() {
-	srv := &http.Server{
+	t.srv = &http.Server{
 		Addr:    fmt.Sprintf(":%d", t.port),
 		Handler: t.r,
 	}
 	go func() {
 		glog.Info(fmt.Sprintf("服务开始运行(%d)", t.port))
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		if err := t.srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			glog.Error(err.Error())
 		}
 	}()
-	gexit.WaitExit(func(ctx context.Context) {
-		glog.Info("服务正在关闭")
-		if err := srv.Shutdown(ctx); err != nil {
-			glog.Error(err.Error())
-		}
-		glog.Info("服务关闭成功")
-	})
 }
+
+// 停止
+func (t *Ggin) Stop(ctx context.Context) {
+	glog.Info("服务正在关闭")
+	if err := t.srv.Shutdown(ctx); err != nil {
+		glog.Error(err.Error())
+	}
+	glog.Info("服务关闭成功")
+}
+

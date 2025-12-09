@@ -8,7 +8,7 @@ import (
 )
 
 // 获取文件
-func (t *OSS) Get(fileName string) ([]byte, error) {
+func (t *Goss) Get(fileName string) ([]byte, error) {
 	request := &oss.GetObjectRequest{
 		Bucket: oss.Ptr(t.bucketName),
 		Key:    oss.Ptr(fileName),

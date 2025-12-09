@@ -9,7 +9,7 @@ import (
 )
 
 // 上传文件
-func (t *OSS) Put(data []byte) (string, error) {
+func (t *Goss) Put(data []byte) (string, error) {
 	fileName := gsha.Sha1Str(data)
 	request := &oss.PutObjectRequest{
 		Bucket: oss.Ptr(t.bucketName),

@@ -1,9 +1,11 @@
 package ggin
 
 import (
+	"context"
 	"testing"
 
 	"github.com/gin-gonic/gin"
+	"github.com/lsq51201314/go-utils/gexit"
 	"github.com/lsq51201314/go-utils/gjwt"
 )
 
@@ -23,4 +25,7 @@ func TestGgin(t *testing.T) {
 		}
 	})
 	g.Run()
+	gexit.WaitExit(func(ctx context.Context) {
+		g.Stop(ctx)
+	})
 }

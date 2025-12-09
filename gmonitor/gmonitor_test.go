@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"testing"
+
+	"github.com/lsq51201314/go-utils/gexit"
 )
 
 func TestGmonitor(t *testing.T) {
@@ -13,4 +15,5 @@ func TestGmonitor(t *testing.T) {
 		fmt.Println(file, err)
 	})
 	gm.Run()
+	gexit.WaitExit()
 }

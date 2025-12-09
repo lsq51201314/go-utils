@@ -6,7 +6,7 @@ import (
 )
 
 // 对象存储
-type OSS struct {
+type Goss struct {
 	endpoint        string
 	region          string
 	bucketName      string
@@ -16,8 +16,8 @@ type OSS struct {
 }
 
 // 新建
-func New(endpoint, region, bucketName, accessKeyId, accessKeySecret string) *OSS {
-	obj := OSS{
+func New(endpoint, region, bucketName, accessKeyId, accessKeySecret string) *Goss {
+	obj := Goss{
 		endpoint:        endpoint,
 		region:          region,
 		bucketName:      bucketName,
