@@ -1,7 +1,7 @@
-package http
+package ghttp
 
 //提交请求
-func Post(requrl string, params, header map[string]string, data []byte, timeout ...int) ([]byte, error) {
+func Post(requrl string, params, header map[string]string, data []byte, timeout ...int) (int,[]byte, error) {
 	to := 10
 	if len(timeout) > 0 && timeout[0] > 0 {
 		to = timeout[0]

@@ -1,7 +1,7 @@
-package http
+package ghttp
 
 //删除请求
-func Delete(requrl string, params, header map[string]string, data []byte, timeout ...int) ([]byte, error) {
+func Delete(requrl string, params, header map[string]string, data []byte, timeout ...int) (int,[]byte, error) {
 	to := 10
 	if len(timeout) > 0 && timeout[0] > 0 {
 		to = timeout[0]

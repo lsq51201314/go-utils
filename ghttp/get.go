@@ -1,18 +1,17 @@
-package http
+package ghttp
 
 import (
-	"fmt"
 	"io"
 	"net/http"
 	"net/url"
 	"time"
 )
 
-//获取请求
-func Get(requrl string, params, header map[string]string, timeout ...int) ([]byte, error) {
+// 获取请求
+func Get(requrl string, params, header map[string]string, timeout ...int) (int, []byte, error) {
 	baseURL, err := url.Parse(requrl)
 	if err != nil {
-		return nil, err
+		return 0, nil, err
 	}
 	if len(params) > 0 {
 		pq := url.Values{}
@@ -30,20 +29,23 @@ func Get(requrl string, params, header map[string]string, timeout ...int) ([]byt
 	}
 	req, err := http.NewRequest("GET", baseURL.String(), nil)
 	if err != nil {
-		return nil, err
+		return 0, nil, err
 	}
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36")
 	for k, v := range header {
 		req.Header.Set(k, v)
 	}
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		return 0, nil, err
 	}
 	defer resp.Body.Close()
 	//处理状态
 	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("错误状态:%d", resp.StatusCode)
+		return resp.StatusCode, nil, nil
 	}
-	return io.ReadAll(resp.Body)
+	buf, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return resp.StatusCode, nil, err
+	}
+	return resp.StatusCode, buf, nil
 }
