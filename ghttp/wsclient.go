@@ -43,9 +43,9 @@ func (t *WSClient) Close() {
 }
 
 // 阻塞
-func (t *WSClient) Run(url string) {
+func (t *WSClient) Run(url string, headers map[string][]string) {
 	t.Close()
-	conn, _, err := websocket.DefaultDialer.Dial(url, nil)
+	conn, _, err := websocket.DefaultDialer.Dial(url, headers)
 	if err != nil {
 		//连接断开
 		if t.onclose != nil {

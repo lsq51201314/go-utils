@@ -35,6 +35,7 @@ func TestGgin(t *testing.T) {
 }
 
 func wstest(c *gin.Context) {
+	fmt.Println("Authorization",c.Request.Header.Get("Authorization"))
 	var wss ghttp.WSServer
 	wss.SetOnOpen(onopen)
 	wss.SetOnClose(onclose)

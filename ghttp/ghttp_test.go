@@ -24,8 +24,7 @@ func TestGhttp(t *testing.T) {
 	wsc.SetOnOpen(onopen)
 	wsc.SetOnClose(onclose)
 	wsc.SetOnMessage(onmessage)
-	wsc.Run("ws://127.0.0.1:22345/api/ws")
-
+	wsc.Run("ws://127.0.0.1:22345/api/ws", nil)
 }
 
 func onopen(conn *websocket.Conn) {
