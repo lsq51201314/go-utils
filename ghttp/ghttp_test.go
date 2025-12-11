@@ -3,6 +3,7 @@ package ghttp
 import (
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/gorilla/websocket"
 )
@@ -24,7 +25,18 @@ func TestGhttp(t *testing.T) {
 	wsc.SetOnOpen(onopen)
 	wsc.SetOnClose(onclose)
 	wsc.SetOnMessage(onmessage)
-	wsc.Run("ws://127.0.0.1:22345/api/ws", nil)
+	go wsc.Conn("ws://127.0.0.1:22345/api/ws", nil)
+	n := 0
+	for {
+		n++
+		time.Sleep(1 * time.Second)
+		if err := wsc.Send([]byte("Hello")); err != nil {
+			break
+		}
+		if n > 10 {
+			wsc.Close()
+		}
+	}
 }
 
 func onopen(conn *websocket.Conn) {

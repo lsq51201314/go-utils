@@ -1,6 +1,8 @@
 package ghttp
 
 import (
+	"errors"
+
 	"github.com/gorilla/websocket"
 )
 
@@ -31,19 +33,18 @@ func (t *WSClient) Send(data []byte) error {
 	if t.conn != nil {
 		return t.conn.WriteMessage(websocket.TextMessage, data)
 	}
-	return nil
+	return errors.New("连接已断开")
 }
 
 // 关闭连接
 func (t *WSClient) Close() {
 	if t.conn != nil {
 		t.conn.Close()
-		t.conn = nil
 	}
 }
 
 // 阻塞
-func (t *WSClient) Run(url string, headers map[string][]string) {
+func (t *WSClient) Conn(url string, headers map[string][]string) {
 	t.Close()
 	conn, _, err := websocket.DefaultDialer.Dial(url, headers)
 	if err != nil {
