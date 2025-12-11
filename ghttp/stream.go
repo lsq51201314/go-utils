@@ -9,10 +9,10 @@ import (
 )
 
 // 回调函数
-type CallBack func(line string)
+type StreamCallBack func(line string)
 
 // 流式请求 (POST)
-func Stream(requrl string, params, header map[string]string, data []byte, cfunc CallBack, timeout ...int) (int, []byte, error) {
+func Stream(requrl string, params, header map[string]string, data []byte, cfunc StreamCallBack, timeout ...int) (int, []byte, error) {
 	baseURL, err := url.Parse(requrl)
 	if err != nil {
 		return 0, nil, err

@@ -10,6 +10,7 @@ require (
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/goccy/go-yaml v1.18.0
 	github.com/golang-jwt/jwt/v4 v4.5.2
+	github.com/gorilla/websocket v1.5.3
 	github.com/mojocn/base64Captcha v1.3.8
 	github.com/mozillazg/go-pinyin v0.21.0
 	github.com/spf13/cast v1.10.0
