@@ -32,7 +32,6 @@ func Stream(requrl string, params, header map[string]string, data []byte, cfunc 
 	if err != nil {
 		return 0, nil, err
 	}
-	//req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36")
 	for k, v := range header {
 		req.Header.Set(k, v)
 	}
