@@ -4,6 +4,7 @@ go 1.25.5
 
 require (
 	github.com/aliyun/alibabacloud-oss-go-sdk-v2 v1.3.0
+	github.com/bwmarrin/snowflake v0.3.0
 	github.com/fsnotify/fsnotify v1.9.0
 	github.com/gin-gonic/gin v1.11.0
 	github.com/go-playground/validator/v10 v10.27.0
