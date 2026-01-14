@@ -30,11 +30,11 @@ func Validate(token *gjwt.Token) func(c *gin.Context) {
 }
 
 // 获取用户 uid
-func GetUserID(c *gin.Context, userId *int64) bool {
+func GetUserID(c *gin.Context, userId *string) bool {
 	val, ok := c.Get("uid")
 	if !ok {
 		return false
 	}
-	*userId = cast.ToInt64(val)
+	*userId = cast.ToString(val)
 	return true
 }
