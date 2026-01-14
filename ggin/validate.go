@@ -1,6 +1,8 @@
 package ggin
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/lsq51201314/go-utils/gjwt"
 	"github.com/spf13/cast"
@@ -11,6 +13,7 @@ func Validate(token *gjwt.Token) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		//获取token
 		h := c.Request.Header.Get("Authorization")
+		fmt.Println("Authorization:", h)
 		if h == "" {
 			MustLogin(c)
 			c.Abort()
@@ -18,6 +21,7 @@ func Validate(token *gjwt.Token) func(c *gin.Context) {
 		}
 		//解析token
 		userId, err := token.Validate(h)
+		fmt.Println("UserId:", userId)
 		if err != nil {
 			MustLogin(c)
 			c.Abort()
