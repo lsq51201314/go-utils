@@ -28,6 +28,14 @@ func SendSuccess(c *gin.Context) {
 	})
 }
 
+// 发送文本
+func SendText(c *gin.Context, code int, msg string) {
+	c.JSON(http.StatusOK, gin.H{
+		"code": code,
+		"msg":  msg,
+	})
+}
+
 // 发送数据
 func SendData(c *gin.Context, data any) {
 	c.JSON(http.StatusOK, gin.H{
