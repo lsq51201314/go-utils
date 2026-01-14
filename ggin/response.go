@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/lsq51201314/go-utils/gconst"
 )
 
 // 必须登录
@@ -25,6 +26,14 @@ func SendSuccess(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"code": http.StatusOK,
 		"msg":  "success",
+	})
+}
+
+// 发送代码
+func SendCode(c *gin.Context, code gconst.Option, msg ...string) {
+	c.JSON(http.StatusOK, gin.H{
+		"code": code.ID,
+		"msg":  code.FormatText(msg...),
 	})
 }
 
