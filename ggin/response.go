@@ -9,7 +9,10 @@ import (
 
 // 必须登录
 func MustLogin(c *gin.Context) {
-	c.AbortWithStatus(http.StatusUnauthorized)
+	c.JSON(http.StatusUnauthorized, gin.H{
+		"code": http.StatusUnauthorized,
+		"msg":  "请先登录",
+	})
 }
 
 // 服务器错误
