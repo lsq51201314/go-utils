@@ -9,7 +9,7 @@ import (
 )
 
 type customClaims struct {
-	UserID int64 `json:"uid,string"`
+	UserID string `json:"uid,string"`
 	jwt.RegisteredClaims
 }
 
@@ -31,7 +31,7 @@ func New(key string, expires ...int) *Token {
 }
 
 // 生成凭证
-func (t *Token) Generate(userId int64) (string, error) {
+func (t *Token) Generate(userId string) (string, error) {
 	n := time.Now()
 	claims := &customClaims{
 		UserID: userId,
@@ -45,16 +45,16 @@ func (t *Token) Generate(userId int64) (string, error) {
 }
 
 // 验证凭证
-func (t *Token) Validate(token string) (int64, error) {
+func (t *Token) Validate(token string) (string, error) {
 	tk, err := jwt.ParseWithClaims(token, &customClaims{},
 		func(token *jwt.Token) (any, error) {
 			return t.key, nil
 		})
 	if err != nil {
-		return 0, err
+		return "", err
 	}
 	if claims, ok := tk.Claims.(*customClaims); ok && tk.Valid {
 		return claims.UserID, nil
 	}
-	return 0, errors.New("凭证无效")
+	return "", errors.New("凭证无效")
 }
