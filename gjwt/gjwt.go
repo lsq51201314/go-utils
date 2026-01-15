@@ -31,17 +31,19 @@ func New(key string, expires ...int) *Token {
 }
 
 // 生成凭证
-func (t *Token) Generate(userId string) (string, error) {
+func (t *Token) Generate(userId string) (string, int64, error) {
 	n := time.Now()
+	e := n.Add(t.expires) //过期时间
 	claims := &customClaims{
 		UserID: userId,
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(n.Add(t.expires)),
+			ExpiresAt: jwt.NewNumericDate(e),
 			IssuedAt:  jwt.NewNumericDate(n),
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(t.key)
+	str, err := token.SignedString(t.key)
+	return str, e.UnixMilli(), err
 }
 
 // 验证凭证
