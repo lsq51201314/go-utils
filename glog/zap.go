@@ -59,5 +59,5 @@ func getEncoder() zapcore.Encoder {
 }
 
 func getDateTime(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
-	enc.AppendString(t.In(gtime.Location).Format("2006-01-02 15:04:05.000000"))
+	enc.AppendString(t.In(gtime.Location()).Format("2006-01-02 15:04:05.000000"))
 }

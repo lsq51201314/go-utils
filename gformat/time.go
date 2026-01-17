@@ -8,11 +8,11 @@ import (
 )
 
 func Time(t time.Time) string {
-	return t.In(gtime.Location).Format("2006-01-02 15:04:05")
+	return t.In(gtime.Location()).Format("2006-01-02 15:04:05")
 }
 
 func Date(t time.Time) string {
-	return t.In(gtime.Location).Format("2006-01-02")
+	return t.In(gtime.Location()).Format("2006-01-02")
 }
 
 func GetTimeNull(t string) sql.NullTime {
@@ -20,7 +20,7 @@ func GetTimeNull(t string) sql.NullTime {
 		Time:  time.Time{},
 		Valid: false,
 	}
-	if n, err := time.ParseInLocation("2006-01-02 15:04:05", t, gtime.Location); err == nil {
+	if n, err := time.ParseInLocation("2006-01-02 15:04:05", t, gtime.Location()); err == nil {
 		r.Time = n
 		r.Valid = true
 	}
@@ -39,7 +39,7 @@ func GetDateNull(t string) sql.NullTime {
 		Time:  time.Time{},
 		Valid: false,
 	}
-	if n, err := time.ParseInLocation("2006-01-02", t, gtime.Location); err == nil {
+	if n, err := time.ParseInLocation("2006-01-02", t, gtime.Location()); err == nil {
 		r.Time = n
 		r.Valid = true
 	}

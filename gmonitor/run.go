@@ -16,7 +16,7 @@ func (m *GMonitor) Run() {
 				{
 					if ev.Op&fsnotify.Write == fsnotify.Write {
 						if ev.Name == m.path {
-							nt := time.Now().In(gtime.Location).Unix()
+							nt := time.Now().In(gtime.Location()).Unix()
 							if nt-m.lastTime > 3 { //大于3秒
 								if m.callback != nil {
 									//延迟3秒(让文件彻底写入释放)

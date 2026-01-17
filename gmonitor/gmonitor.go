@@ -23,7 +23,7 @@ func New(path string, cfun CallBack) (*GMonitor, error) {
 	}
 	obj := &GMonitor{
 		path:     path,
-		lastTime: time.Now().In(gtime.Location).Unix(),
+		lastTime: time.Now().In(gtime.Location()).Unix(),
 		callback: cfun,
 	}
 	var err error
